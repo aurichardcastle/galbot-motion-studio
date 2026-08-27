@@ -366,6 +366,10 @@ evidence, and it does not pretend to be.
 
 ## Attribution and licensing
 
+Written by Auric Hardcastle ([@AuricHardcastle](https://github.com/AuricHardcastle))
+as an independent contributor to Galbot's developer SDK. Released under
+[Apache-2.0](LICENSE).
+
 Third-party components are vendored and attributed rather than silently copied:
 
 - **`mink`** (Apache-2.0) supplies the QP with hard equality constraints,

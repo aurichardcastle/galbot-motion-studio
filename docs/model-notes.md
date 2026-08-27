@@ -380,7 +380,7 @@ false clear. A checker that treats `0.0` as "touching" therefore fails safe.
 contract — a rung that saturates *proves* the true distance exceeds it, so any later rung returning
 less than an already-proven lower bound is rejected and the bound kept. Affected pairs are marked
 `exact=False` and surfaced in `report.suspect_pairs`. A naive single query at `distmax=0.5` reports
-20 of 30 test poses as "0.00 mm clearance" — pure garbage.
+20 of 30 test poses as "0.00 mm clearance", which is unusable.
 
 ### 6.6 Distance queries ignore `contype` entirely — **independently re-verified**
 

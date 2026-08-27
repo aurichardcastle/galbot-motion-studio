@@ -6,6 +6,9 @@ build-backend = "hatchling.build"
 name = "galbot-motion-studio"
 version = "0.1.0"
 description = "Simulation-first webcam motion studio for the Galbot G1"
+authors = [{ name = "Auric Hardcastle" }]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 requires-python = ">=3.11,<3.15"
 dependencies = [
   "mujoco>=3.2,<4",
