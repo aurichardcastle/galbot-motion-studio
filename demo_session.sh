@@ -54,9 +54,10 @@ set -- \
   "$@"
 
 if [ -n "$replay" ]; then
-  # A recorded session is already its own raw evidence, and --source-video is
-  # refused with --video, so a replay writes the clip and the composite only.
-  set -- --video "$replay" --analysis-sync "$@"
+    # A recorded session is already its own raw evidence, and --source-video is
+    # refused with --video, so a replay writes the clip and the composite only.
+    # It still opens the same fullscreen studio display as a live take.
+    set -- --video "$replay" --analysis-sync --fullscreen "$@"
 else
   # macOS hands a nearby iPhone out as a Continuity Camera and will prefer it,
   # sometimes between our enumeration and OpenCV's open. `builtin` resolves by
