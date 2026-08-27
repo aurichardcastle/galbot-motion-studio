@@ -1,0 +1,6 @@
+[holistic]
+model_asset = "assets/mediapipe/holistic_landmarker.task"
+model_sha256 = "e2dab61191e2dcd0a15f943d8e3ed1dce13c82dfa597b9dd39f562975a50c3f8"
+min_pose_landmarks_for_identity = 33
+required_landmarks = ["face_1", "pose_11", "pose_12"]
+

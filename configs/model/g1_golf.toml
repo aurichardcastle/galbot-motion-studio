@@ -1,0 +1,12 @@
+[model]
+description_root = "third_party/galbot_one_golf_description"
+fixed_base_mjcf = "mjcf/galbot_one_golf_fixed_base.xml"
+fixed_base_urdf = "urdf/galbot_one_golf_fixed_base.urdf"
+floating_urdf = "urdf/galbot_one_golf.urdf"
+tcp_validator = "scripts/validate_tcp_frames.py"
+
+[hashes]
+floating_urdf = "8e7722191495d8b96ca8d64cc5dff918fb9cd673c74b70728641856d757e3b48"
+fixed_urdf = "b340d2491fcbb53ec19bf9df3779f12b10585e7130847386f18cb6f476bbdfce"
+fixed_mjcf = "6a92e1bca62507c0d5e3ffbfaddf9fff50d8e1bc2b0a3bacd2c320f36159eea7"
+

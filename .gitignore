@@ -1,0 +1,38 @@
+# Operator-identifying capture evidence — kept on disk, never in git.
+*.mp4
+*.frame-map.json
+*.landmarks.json
+artifacts/
+my_clip*.json
+
+# Staging half-writes of the above.  `_staging_path` in
+# src/galbot_motion_studio/cli.py names them `.<stem>.partial-<hex><suffix>`
+# beside the real output, so an interrupted capture can leave behind a landmark
+# sidecar, frame map, clip, or raw MP4 that a run which finished would have
+# renamed away.  The staged landmark sidecar is written from the same document
+# that gets published, so it carries the same operator body data.  Matched by
+# name, not by directory, so this also holds for captures written outside
+# `artifacts/`.
+.*.partial-*
+
+# HUD job logs: transcripts of local runs, useful to keep on disk and not
+# something to publish.
+artifacts/hud-jobs/
+
+# Local environments, agent state, and ad-hoc analysis outputs.
+# These may contain host paths, transcripts, or private capture-derived data.
+.venv
+.claude/
+.codex/
+.firecrawl/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+frames*.json
+workload.pkl
+.DS_Store
