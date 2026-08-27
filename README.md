@@ -42,6 +42,8 @@ python3.11 -m venv .venv
 ./run_demo.sh
 ```
 
+To validate the exported dataset with LeRobot too, install `.[export-validation]`.
+
 It writes `artifacts/demo-<timestamp>/` containing a pose comparison, a preview
 video, a canonical recording, and a declared-simulated LeRobot v2.1 dataset.
 Every stage below actually runs — retargeting, IK, the guarded controller, the

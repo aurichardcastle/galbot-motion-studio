@@ -2148,6 +2148,15 @@ def _demo(output: Path | None) -> int:
     )
     frames_dir = output / "frames"
     frames_dir.mkdir()
+    import mujoco
+
+    camera = mujoco.MjvCamera()
+    mujoco.mjv_defaultCamera(camera)
+    camera.lookat[:] = [0.0, 0.0, 1.1]
+    camera.distance = 2.2
+    camera.azimuth = 150.0
+    camera.elevation = -10.0
+    print(f"rendering {DEMO_FRAMES} synthetic frames...", flush=True)
     # 30 Hz for DEMO_SECONDS, tracing a wave rather than a one-way ramp.
     #
     # This used to be 11 frames at 5 Hz, with a comment saying the low rate existed
@@ -2159,25 +2168,28 @@ def _demo(output: Path | None) -> int:
     #
     # motion_fraction follows a raised sine so the arms sweep out and back twice
     # instead of drifting to a stop, which is what "mirroring someone waving" is.
-    for frame_index in range(DEMO_FRAMES):
-        sequence = frame_index + 1
-        timestamp = 1_000_000_000 + sequence * DEMO_FRAME_NS
-        phase = sequence / DEMO_FRAMES
-        motion_fraction = 0.5 + DEMO_WAVE_AMPLITUDE * sin(
-            2.0 * pi * DEMO_WAVE_CYCLES * phase
-        )
-        observation = synthetic_observation(
-            sequence,
-            timestamp_ns=timestamp,
-            motion_fraction=motion_fraction,
-        )
-        result = pipeline.process_fail_closed(observation, now_mono_ns=timestamp)
-        recorder.append(result)
-        if result.decision.outcome is not SafetyOutcome.ALLOW:
-            raise RuntimeError(
-                f"synthetic frame {sequence} was not allowed: {result.decision.reasons}"
+    with mujoco.Renderer(pipeline.sink.model, height=480, width=640) as renderer:
+        for frame_index in range(DEMO_FRAMES):
+            sequence = frame_index + 1
+            timestamp = 1_000_000_000 + sequence * DEMO_FRAME_NS
+            phase = sequence / DEMO_FRAMES
+            motion_fraction = 0.5 + DEMO_WAVE_AMPLITUDE * sin(
+                2.0 * pi * DEMO_WAVE_CYCLES * phase
             )
-        _render_png(pipeline.sink, frames_dir / f"frame_{frame_index:03d}.png")
+            observation = synthetic_observation(
+                sequence,
+                timestamp_ns=timestamp,
+                motion_fraction=motion_fraction,
+            )
+            result = pipeline.process_fail_closed(observation, now_mono_ns=timestamp)
+            recorder.append(result)
+            if result.decision.outcome is not SafetyOutcome.ALLOW:
+                raise RuntimeError(
+                    f"synthetic frame {sequence} was not allowed: {result.decision.reasons}"
+                )
+            _render_png(pipeline.sink, frames_dir / f"frame_{frame_index:03d}.png", renderer, camera)
+            if sequence % 30 == 0:
+                print(f"  rendered {sequence}/{DEMO_FRAMES}", flush=True)
     clip = recorder.finish()
     clip_path = output / "motion_clip.json"
     clip.save(clip_path)
@@ -2267,7 +2279,12 @@ def _demo(output: Path | None) -> int:
 def _validate_v21(dataset: Path) -> str:
     import sys
 
-    from lerobot.datasets.lerobot_dataset import LeRobotDataset
+    try:
+        from lerobot.datasets.lerobot_dataset import LeRobotDataset
+    except ModuleNotFoundError as error:
+        if error.name == "lerobot":
+            return "optional LeRobot validation unavailable; install .[export-validation]"
+        raise
 
     loaded = LeRobotDataset(
         repo_id="local/galbot-motion-studio",
@@ -2299,20 +2316,12 @@ def _validate_v21(dataset: Path) -> str:
         sys.path.remove(str(validator_root))
 
 
-def _render_png(sink: MujocoPreviewSink, path: Path) -> None:
+def _render_png(sink: MujocoPreviewSink, path: Path, renderer, camera) -> None:
     import cv2
-    import mujoco
 
-    camera = mujoco.MjvCamera()
-    mujoco.mjv_defaultCamera(camera)
-    camera.lookat[:] = [0.0, 0.0, 1.1]
-    camera.distance = 2.2
-    camera.azimuth = 150.0
-    camera.elevation = -10.0
     with sink.lock:
-        with mujoco.Renderer(sink.model, height=480, width=640) as renderer:
-            renderer.update_scene(sink.data, camera=camera)
-            rgb = renderer.render()
+        renderer.update_scene(sink.data, camera=camera)
+        rgb = renderer.render()
     if not cv2.imwrite(str(path), rgb[:, :, ::-1]):
         raise RuntimeError(f"could not write rendered frame: {path}")
 
