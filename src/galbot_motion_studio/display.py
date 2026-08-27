@@ -343,7 +343,7 @@ def _screen_content_size() -> tuple[float, float] | None:
         try:
             from subprocess import run
 
-            raw = run(
+            result = run(
                 [
                     "osascript",
                     "-l",
@@ -357,7 +357,8 @@ def _screen_content_size() -> tuple[float, float] | None:
                 text=True,
                 timeout=2,
                 check=True,
-            ).stdout.strip()
+            )
+            raw = result.stdout.strip() or result.stderr.strip()
             width, height = (float(value) for value in raw.split(",", 1))
         except Exception:  # noqa: BLE001 - optional platform capability
             return None
