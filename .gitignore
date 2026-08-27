@@ -22,8 +22,6 @@ artifacts/hud-jobs/
 # Local environments, agent state, and ad-hoc analysis outputs.
 # These may contain host paths, transcripts, or private capture-derived data.
 .venv
-.claude/
-.codex/
 .firecrawl/
 __pycache__/
 *.pyc
