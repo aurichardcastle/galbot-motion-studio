@@ -18,6 +18,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from importlib import import_module
 from math import isfinite
+from sys import platform
 from typing import Any, ClassVar, Iterable, Mapping
 
 import mujoco
@@ -328,8 +329,8 @@ def _screen_content_size() -> tuple[float, float] | None:
     narrow -- an 8-point sliver down one edge, measured fill 0.995, versus the
     864-device-pixel dead band this replaces.  ``visibleFrame`` estimates the
     strip more closely but moves with the Dock, and the canvas size is baked into
-    every recording, so the deterministic inset wins.  Returns ``None`` off macOS
-    or without pyobjc, where the caller keeps the historical fixed panel size.
+    every recording, so the deterministic inset wins.  When PyObjC is absent,
+    macOS's built-in JXA bridge provides the same point dimensions.
     """
     try:
         screen = import_module("AppKit").NSScreen.mainScreen()
@@ -337,7 +338,29 @@ def _screen_content_size() -> tuple[float, float] | None:
         width = float(size.width)
         height = float(size.height) - float(screen.safeAreaInsets().top)
     except Exception:  # noqa: BLE001 - optional platform capability
-        return None
+        if platform != "darwin":
+            return None
+        try:
+            from subprocess import run
+
+            raw = run(
+                [
+                    "osascript",
+                    "-l",
+                    "JavaScript",
+                    "-e",
+                    'ObjC.import("AppKit"); const s = $.NSScreen.mainScreen; '
+                    'const f = s.frame; const i = s.safeAreaInsets; '
+                    "console.log(`${f.size.width},${f.size.height - i.top}`)",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=2,
+                check=True,
+            ).stdout.strip()
+            width, height = (float(value) for value in raw.split(",", 1))
+        except Exception:  # noqa: BLE001 - optional platform capability
+            return None
     if not (isfinite(width) and isfinite(height)) or width <= 0 or height <= 0:
         return None
     return width, height
