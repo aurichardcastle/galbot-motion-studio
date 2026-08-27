@@ -46,7 +46,7 @@ class ModelManifest:
 
 CANONICAL_MANIFEST = ModelManifest(
     model_root=MODEL_ROOT,
-    package_tree_sha256="ab3707a6e3ff6027a3ed2a9d7bcbba7fbeda6e880a02ea664b4bea43ace9af10",
+    package_tree_sha256="71b09415b2e822fd18ad4ff659d7b3c54b406c5753bb9ba8fca3abc2e6e5025f",
     floating_urdf_sha256="8e7722191495d8b96ca8d64cc5dff918fb9cd673c74b70728641856d757e3b48",
     fixed_urdf_sha256="b340d2491fcbb53ec19bf9df3779f12b10585e7130847386f18cb6f476bbdfce",
     fixed_mjcf_sha256="6a92e1bca62507c0d5e3ffbfaddf9fff50d8e1bc2b0a3bacd2c320f36159eea7",
