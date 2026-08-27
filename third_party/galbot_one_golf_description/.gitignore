@@ -2,7 +2,6 @@
 3rd_party/
 
 # ai trash
-.codex/
 .omx/
 
 # ros build artifacts
