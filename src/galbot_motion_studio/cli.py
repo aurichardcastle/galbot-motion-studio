@@ -2120,6 +2120,7 @@ DEMO_SECONDS = 6
 DEMO_FRAMES = DEMO_FPS * DEMO_SECONDS
 DEMO_FRAME_NS = 1_000_000_000 // DEMO_FPS
 DEMO_WAVE_CYCLES = 2.0
+DEMO_WAVE_AMPLITUDE = 0.30
 
 def _demo(output: Path | None) -> int:
     if output is None:
@@ -2162,7 +2163,9 @@ def _demo(output: Path | None) -> int:
         sequence = frame_index + 1
         timestamp = 1_000_000_000 + sequence * DEMO_FRAME_NS
         phase = sequence / DEMO_FRAMES
-        motion_fraction = 0.5 + 0.45 * sin(2.0 * pi * DEMO_WAVE_CYCLES * phase)
+        motion_fraction = 0.5 + DEMO_WAVE_AMPLITUDE * sin(
+            2.0 * pi * DEMO_WAVE_CYCLES * phase
+        )
         observation = synthetic_observation(
             sequence,
             timestamp_ns=timestamp,

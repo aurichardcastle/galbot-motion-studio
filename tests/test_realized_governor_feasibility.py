@@ -23,6 +23,7 @@ from math import pi, radians, sin
 from galbot_motion_studio.cli import (
     DEMO_FRAMES,
     DEMO_FRAME_NS,
+    DEMO_WAVE_AMPLITUDE,
     DEMO_WAVE_CYCLES,
 )
 from galbot_motion_studio.pipeline import MotionStudioPipeline
@@ -32,7 +33,7 @@ from galbot_motion_studio.safety.supervisor import SafetyOutcome
 
 def _demo_observation(sequence: int):
     timestamp = 1_000_000_000 + sequence * DEMO_FRAME_NS
-    motion_fraction = 0.5 + 0.45 * sin(
+    motion_fraction = 0.5 + DEMO_WAVE_AMPLITUDE * sin(
         2.0 * pi * DEMO_WAVE_CYCLES * (sequence / DEMO_FRAMES)
     )
     return synthetic_observation(
@@ -197,7 +198,7 @@ def _run_realized_step_scenario() -> tuple[bool, bool]:
     pipeline._feasible_governor_command = spy
     for frame_index in range(DEMO_FRAMES):
         sequence = frame_index + 1
-        motion_fraction = 0.5 + 0.45 * sin(
+        motion_fraction = 0.5 + DEMO_WAVE_AMPLITUDE * sin(
             2.0 * pi * DEMO_WAVE_CYCLES * (sequence / DEMO_FRAMES)
         )
         observation = synthetic_observation(
