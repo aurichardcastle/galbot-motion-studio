@@ -169,7 +169,7 @@ simulation nothing can be damaged, so the floor exists to stop *visually wrong*
 output -- an arm through the torso -- and the sweep above shows 5 mm does that as
 completely as 10 mm. On hardware the floor stands between a mispredicted pose and
 a bent link; the tool geometry does not match this model at all (generic grippers
-here, a HUILING gripper and a suction cup on the robot); and the honest position
+here, a different gripper and a suction cup on the robot); and the honest position
 is that 10 mm was never validated as *sufficient* for hardware either, only as
 arbitrary. So hardware keeps it, and ``HARDWARE_FLOOR_RATCHET_M`` makes it
 structurally impossible for the hardware floor to fall below today's value even

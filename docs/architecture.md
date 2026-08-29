@@ -186,7 +186,7 @@ Human joint angles are never copied directly to robot joints.
 
 - A pinch ratio can control a continuous gripper only after the installed gripper API/range is confirmed.
 - A suction tool uses a deliberate discrete gesture with dwell and explicit UI confirmation, not a noisy continuous mapping.
-- The current URDF models generic grippers on both sides and does not match the observed HUILING/suction tools. Until the installed tool identity, TCP, mount, payload, and conservative collision envelope are physically attested, all physical arm motion—not merely tool actuation—remains disabled. A measured conservative bounding volume may temporarily substitute only if its uncertainty is added to every clearance calculation.
+- The current URDF models generic grippers on both sides and does not match the gripper and suction tools actually installed. Until the installed tool identity, TCP, mount, payload, and conservative collision envelope are physically attested, all physical arm motion—not merely tool actuation—remains disabled. A measured conservative bounding volume may temporarily substitute only if its uncertainty is added to every clearance calculation.
 
 ### Simulation locomotion
 
@@ -388,7 +388,7 @@ No step unlocks automatically. Each needs a human review of the preceding log.
 3. Is there a controller-side command TTL/watchdog/dead-man setting with a vendor-specified maximum stop time and travel?
 4. Is there an explicit cancel/hold API independent of `request_shutdown()`?
 5. Can the SDK report e-stop and latched hardware-fault state separately?
-6. Can Galbot provide the URDF/MJCF for the installed HUILING gripper and suction tool?
+6. Can Galbot provide the URDF/MJCF for the installed gripper and suction tools?
 7. May the receiver code remain on the HPU between visits?
 8. Will the next robot have the same tool configuration and wired addressing?
 

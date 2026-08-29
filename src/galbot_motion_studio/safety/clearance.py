@@ -125,7 +125,7 @@ plane is group 0 and is NOT checked.  This module does not know about the enviro
 Tool links
 ----------
 The shipped model has a GENERIC parallel-jaw gripper on both arms.  The real robot has a
-HUILING gripper on the left and a suction cup on the right, so every distance that
+a different gripper on the left and a suction cup on the right, so every distance that
 involves a `*gripper*` / `*suction*` / `*finger*` / `*tcp*` link is geometrically wrong
 by an unknown amount.  Those pairs are evaluated but flagged separately
 (`report.tool_violations`, `PairResult.is_tool`) so callers can treat them differently.
@@ -231,7 +231,7 @@ HOME_QPOS: Dict[str, float] = {
 #:
 #: These pairs are excluded from the verdict and reported separately. They are also
 #: tool links, whose geometry does not match the real robot at all (the model ships
-#: a generic gripper on both arms; the hardware carries a HUILING gripper and a
+#: a generic gripper on both arms; the hardware carries a different gripper and a
 #: suction cup), so a number derived from them was never trustworthy.
 ASSEMBLY_PREFIXES: Tuple[str, ...] = ("left_gripper_", "right_gripper_")
 

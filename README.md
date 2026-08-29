@@ -15,6 +15,11 @@ This repository is **simulation-only**. There is no robot SDK dependency, no
 network transport, and no physical command path. Nothing here is authorization
 to operate hardware, and the safety supervisor has no state that reaches it.
 
+Simulation-only is a scope decision for *this repository*, not the extent of the
+work behind it: the measured constants and safety rules here come from on-site
+sessions with physical G1 hardware. See
+[Provenance](#provenance-where-the-numbers-come-from).
+
 ---
 
 ## Table of contents
@@ -292,6 +297,19 @@ clearance, joint limits, or rate limits. No candidate is promoted on a headline
 hold count alone.
 
 The full release procedure is in [`docs/operating-guide.md`](docs/operating-guide.md).
+
+### Provenance: where the numbers come from
+
+Values marked `MEASURED` in the source, and the field-log citations in
+`testing/base.py`, `testing/fault_injection.py` and `docs/model-notes.md`, come
+from on-site sessions with physical Galbot G1 hardware in August 2026: SDK
+deployment to the robot, live joint and sensor capture, and commanded arm motion
+on the real units. Several of the SDK findings reported to Galbot came out of
+those sessions, as did the rule that every clearance check in this codebase
+validates a minimum distance rather than the absence of contact.
+
+The field log itself is not published here, which is why those citations do not
+resolve in this tree.
 
 ---
 

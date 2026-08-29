@@ -86,7 +86,7 @@ Until then the honest value is `t_cmd + UNKNOWN`, and the plan must say so.
 | K3 | Velocity / acceleration breach | per-step and per-second caps | reject | |
 | K4 | **Self-collision on the path** | minimum distance over **every interpolated sample** | reject | The 7 Aug collision had a clear start pose *and* a clear end pose. Endpoint checking would have passed it. |
 | K5 | Clearance below floor | conservative minimum distance vs configured floor | reject | Distance, never contact count. A 2 mm miss and a 0.5 m miss both report "0 collisions". |
-| K6 | **Closest pair involves a tool link** | link-name classification | **reject outright** | Attack A5. The model ships a generic gripper on *both* arms; the real robot has a HUILING gripper left and a suction cup right. Tool-link distances are computed against geometry that is not on the robot. "Advisory" is not enough — advisory warnings in a real-time loop are read by nobody. |
+| K6 | **Closest pair involves a tool link** | link-name classification | **reject outright** | Attack A5. The model ships a generic gripper on *both* arms; the real robot has a different gripper on the left and a suction cup on the right. Tool-link distances are computed against geometry that is not on the robot. "Advisory" is not enough — advisory warnings in a real-time loop are read by nobody. |
 | K7 | Baseline pair worsening | per-pair allowable depth + worsening check | reject | Structural overlaps (head/torso, leg/chassis, leg/wheels) may not be whitelisted forever. |
 | K8 | Unevaluable pair | any evaluation error | **reject (fail closed)** | |
 | K9 | Model / tool hash mismatch | hash compared at ARM and at replay | FAULT | A matching hash proves consistency, not correctness — see K6. |

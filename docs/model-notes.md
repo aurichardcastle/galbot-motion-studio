@@ -193,21 +193,22 @@ contact. Worth fixing so the files stop diverging from the capture, not urgent.
 **The model carries an identical parallel-jaw gripper on both arms.** `grep -rni suction` over the
 whole package returns **0 matches**. There is no suction cup, geometry, joint or link anywhere.
 
-Hardware ground truth, from the teach pendant (`VISIT2_FIELD_LOG.md:410`):
-> 当前场景 `base` · 左臂工具 `HUILING_GRAPPER` · 右臂工具 `GSUCKER`
+Hardware ground truth, read off the teach pendant on the physical robot and recorded in the
+field log: the two arms carry **different, asymmetric tools** — a parallel-jaw gripper on the
+left and a suction device on the right. Neither is the model's generic `galbot_gripper`.
 
 So **both** end effectors are wrong: the left is a generic `galbot_gripper` standing in for a
-HUILING_GRAPPER, and the right is that same generic gripper standing in for a **fundamentally
+different gripper, and the right is that same generic gripper standing in for a **fundamentally
 different device**.
 
 `xacro/robot.xacro:7-9` shows this is build-time configuration — `left_ee_type` / `right_ee_type`
 default to `galbot_gripper`, and the shipped URDFs were generated at the defaults. **No suction-cup
 xacro exists** in `xacro/components/`, so **the correct model cannot be regenerated from these files.**
 
-Corroborating: the package ships
-`docs/.images/galbot_one_golf_left_hitbot_gripper_right_suction_cup_urdf.png` — a rendering of a
-configuration the URDFs do not produce. Note that filename says **hitbot** while the pendant says
-**HUILING** — a third name for the left tool. **UNKNOWN** which is correct.
+Corroborating, and from the package alone: it ships an image under `docs/.images/` whose
+filename describes a gripper-left / suction-cup-right configuration — a rendering of a
+configuration the URDFs do not produce. That filename and the pendant also disagree on the
+left tool's name. **UNKNOWN** which is correct.
 
 ### 4.2 Link inventory (per side, identical both sides)
 
@@ -443,8 +444,8 @@ themselves are not real.
 |---|---|
 | Units of SDK `left_gripper_joint1` (`+0.0500`) vs model `left_gripper_joint` range `[0, 1.703]` rad | **UNKNOWN.** Likely metres of jaw width vs radians of drive angle. Needs a hardware sweep or a Galbot answer. |
 | Mapping of SDK `chassis_joint1..4` → model `wheel1..4_joint`, and wheel index ordering | **UNKNOWN.** Nothing in either package states it. |
-| Real left tool: `HUILING_GRAPPER` (pendant) or `hitbot` (package image filename)? | **UNKNOWN.** Two vendor-sourced names disagree. |
-| Geometry of the real GSUCKER and HUILING_GRAPPER | **NOT IN THIS PACKAGE.** No suction xacro exists; the correct model cannot be regenerated. Tracks field-log carried-forward #15. |
+| Identity of the real left tool | **UNKNOWN.** The pendant and the package image filename give different names. |
+| Geometry of the real installed tools | **NOT IN THIS PACKAGE.** No suction xacro exists; the correct model cannot be regenerated. Tracks field-log carried-forward #15. |
 | Whether URDF `effort` or MJCF `forcerange` reflects real actuator torque | **UNKNOWN.** They disagree by 2–6.7×, and 10× the other way on the grippers. |
 | Whether alternate upstream package copies differ beyond TCP roll | **OPEN** — use the vendored pinned package as canonical. |
 
